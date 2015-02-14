@@ -7,7 +7,7 @@
     var MyStorage = new app.MyStorage('local');
   }
   catch (ex) {
-    alert("Sorry, your browser not supported a Webstorage");
+    alert("Sorry, your browser not browserSupported a Webstorage");
   }
 
 })();
