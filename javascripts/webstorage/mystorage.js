@@ -10,15 +10,22 @@ app.MyStorage = (function(){
   /**
    * ストレージから情報を取得する
    *
-   * @param string
+   * @param string key
    * @return string
    */
   MyStorage.prototype.getItem = function(key){
-    return this.resource.getItem(key);
+    if (canUseGetItem(this.resource) === true) {
+      return JSON.parse(this.resource.getItem(key));
+    }
   };
 
   /**
    * ストレージに情報を保存する
+   *
+   * @param string key
+   * @param string value
+   * @param object option
+   * @return this
    */
   MyStorage.prototype.setItem = function(key, value, option){
     this.resource.setItem(key, value);
@@ -27,6 +34,9 @@ app.MyStorage = (function(){
 
   /**
    * ストレージから情報を削除する
+   *
+   * @param string key
+   * @return this
    */
   MyStorage.prototype.removeItem = function(key){
     this.resource.removeItem(key);
@@ -40,29 +50,19 @@ app.MyStorage = (function(){
    * @return Object
    */
   function storage(storageType){
-    switch(storageType){
-    case 'local':
-      try {
+    try {
+      if (storageType == 'local') {
         return localstorage(browserSupported);
       }
-      catch (exc) {
-        return browserCookie(browserSupported);
-      }
-
-    case 'session':
-      try {
+      if (storageType == 'session') {
         return sessionstorage(browserSupported);
       }
-      catch (exc) {
-        return browserCookie(browserSupported);
-      }
-
-    case 'cookie':
-    default:
+    }
+    catch (err) {
       return browserCookie(browserSupported);
     }
 
-    throw new Error('Webstorage is not browserSupported.');
+    return browserCookie(browserSupported);
   }
 
   /**
@@ -108,13 +108,35 @@ app.MyStorage = (function(){
   }
 
   /**
-   * browserSupported とは、ブラウザーが任意のストレージ機能をサポートしている場合のみ「正しい」という事である
+   * browserSupported とは、ブラウザーが任意のストレージ機能をサポートしているという事である
    *
+   * @param Object storage
    * @return boolean サポートしている:true | サポートしていない:false
    */
   function browserSupported(storage){
     return (_.isUndefined(storage) === false);
   }
+
+  /**
+   * canUseGetItem とは、任意のストレージオブジェクトが、getItemというメソッドを使えるという事である
+   *
+   * @param Object storage
+   * @return boolean getItemが使える:true | getItemが使えない:false
+   */
+   function canUseGetItem(storage){
+     return (storage.hasOwnProperty('getItem'));
+   }
+
+   /**
+    * explode とは、区切り文字を使用して、文字列を配列に変換する事である
+    *
+    * @param string separator
+    * @param string src
+    * @return Array
+    */
+    function explode(separator, src){
+
+    }
 
   return MyStorage;
 })();
