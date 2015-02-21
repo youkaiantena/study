@@ -108,7 +108,7 @@ app.MyStorage = (function(){
   }
 
   /**
-   * browserSupported とは、ブラウザーが任意のストレージ機能をサポートしているという事である
+   * browserSupported とは、ブラウザーが任意のストレージ機能をサポートしている事である
    *
    * @param Object storage
    * @return boolean サポートしている:true | サポートしていない:false
@@ -118,7 +118,7 @@ app.MyStorage = (function(){
   }
 
   /**
-   * canUseGetItem とは、任意のストレージオブジェクトが、getItemというメソッドを使えるという事である
+   * canUseGetItem とは、任意のストレージオブジェクトが、getItemというメソッドを使える事である
    *
    * @param Object storage
    * @return boolean getItemが使える:true | getItemが使えない:false
